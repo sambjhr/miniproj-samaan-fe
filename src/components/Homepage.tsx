@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Card } from "./ui/card";
 
 export default function Homepage() {
   return (
@@ -17,6 +18,7 @@ export default function Homepage() {
           Featured Events
         </h2>
 
+        <Card />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <div className="h-48 bg-gray-300 rounded-xl"></div>
           <div className="h-48 bg-gray-300 rounded-xl"></div>

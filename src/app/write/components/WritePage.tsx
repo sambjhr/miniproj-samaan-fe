@@ -26,11 +26,11 @@ interface ThumbnailResponse {
 // 🧩 Skema validasi form
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters."),
-  author: z.string().min(3, "Author must be at least 3 characters."),
+  organizer: z.string().min(3, "Author must be at least 3 characters."),
   category: z.string().min(3, "Category must be at least 3 characters."),
   description: z.string().min(10, "Description must be at least 10 characters."),
   content: z.string().min(10, "Content must be at least 10 characters."),
-  thumbnail: z.instanceof(File, { message: "Thumbnail is required." }),
+  image: z.instanceof(File, { message: "Thumbnail is required." }),
 });
 
 const WritePage = () => {
@@ -42,11 +42,11 @@ const WritePage = () => {
     mode: "onChange",
     defaultValues: {
       title: "",
-      author: "",
+      organizer: "",
       category: "",
       description: "",
       content: "",
-      thumbnail: undefined,
+      image: undefined,
     },
   });
 
@@ -58,14 +58,14 @@ const WritePage = () => {
       const fileName = Date.now() + Math.floor(Math.random() * 1000);
       const url = `/api/files/${folderName}/${fileName}`;
 
-      formData.append("file", data.thumbnail);
+      formData.append("file", data.image);
 
       // Upload file
       const result = await axiosInstance.post<ThumbnailResponse>(url, formData);
 
       // Kirim data ke database
       await axiosInstance.post(`/api/data/Blogs`, {
-        author: data.author,
+        author: data.organizer,
         category: data.category,
         content: data.content,
         description: data.description,
@@ -100,7 +100,7 @@ const WritePage = () => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="title">Title</FieldLabel>
+                  <FieldLabel htmlFor="title">Event Name</FieldLabel>
                   <Input
                     {...field}
                     id="title"
@@ -114,13 +114,13 @@ const WritePage = () => {
               )}
             />
 
-            {/* Author */}
-            <Controller
+            {/* Author harusnya bisa langsung ambil dari pas login*/} 
+            {/* <Controller
               name="author"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="author">Author</FieldLabel>
+                  <FieldLabel htmlFor="author">Organizer</FieldLabel>
                   <Input
                     {...field}
                     id="author"
@@ -132,7 +132,7 @@ const WritePage = () => {
                   )}
                 </Field>
               )}
-            />
+            /> */}
 
             {/* Category */}
             <Controller
@@ -174,35 +174,16 @@ const WritePage = () => {
               )}
             />
 
-            {/* Content */}
-            <Controller
-              name="content"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="content">Content</FieldLabel>
-                  <Textarea
-                    {...field}
-                    id="content"
-                    aria-invalid={fieldState.invalid ? "true" : "false"}
-                    placeholder="Write your blog content..."
-                  />
-                  {fieldState.error && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
 
             {/* Thumbnail */}
             <Controller
-              name="thumbnail"
+              name="image"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="thumbnail">Thumbnail</FieldLabel>
+                  <FieldLabel htmlFor="image">Thumbnail Image</FieldLabel>
                   <Input
-                    id="thumbnail"
+                    id="image"
                     type="file"
                     accept="image/*"
                     aria-invalid={fieldState.invalid ? "true" : "false"}
@@ -217,6 +198,11 @@ const WritePage = () => {
                 </Field>
               )}
             />
+
+
+            {/* ini untuk tempat masukin types of ticket */}
+
+
 
             {/* Submit Button */}
             <Field className="w-fit">

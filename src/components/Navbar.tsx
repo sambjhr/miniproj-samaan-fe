@@ -3,55 +3,45 @@ import { HiOutlineMenu } from "react-icons/hi";
 
 export default function Navbar() {
   return (
-    <header className="w-full border-b bg-white">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-6">
-        
+    <div className="container mx-auto w-full border-b bg-white">
+      <div className="mx-auto flex max-w-7xl items-center gap-6 px-4 py-3">
         {/* LEFT: Logo */}
         <div className="flex items-center">
           <Link href="/">
             <img
               src="/logosamaan.png"
               alt="logo"
-              className="w-[140px] h-[30px] md:h-10 md:w-[186px] cursor-pointer"
+              className="h-[30px] w-[140px] cursor-pointer md:h-10 md:w-[186px]"
             />
           </Link>
         </div>
 
-        {/* CENTER: Menu + Search (hidden on mobile) */}
-        <div className="hidden md:flex flex-1 justify-center items-center gap-10 text-gray-700 font-medium">
+        <div className="hidden flex-1 items-center justify-center gap-10 font-medium text-gray-700 md:flex">
           <Link href="/">Home</Link>
           <Link href="/browseevent">Browse Event</Link>
-          <Link href="/createevent">Create Event</Link>
-          <Link href="/write">Help</Link>
-
-          {/* Search Bar */}
-          <input
-            type="text"
-            placeholder="Search events..."
-            className="border border-gray-300 rounded-lg px-4 py-2 w-[220px]"
-          />
+          <Link href="/write">Create Event</Link>
         </div>
 
         {/* RIGHT: Login + Signup */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           <Link
             href="/login"
-            className="border border-gray-500 px-6 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+            className="rounded-md border border-gray-500 px-6 py-2 text-gray-600 hover:bg-gray-100"
           >
             Log in
           </Link>
 
           <Link
             href="/signup"
-            className="border border-gray-500 px-6 py-2 rounded-md text-gray-600 hover:bg-gray-100"
+            className="rounded-md border border-gray-500 px-6 py-2 text-gray-600 hover:bg-gray-100"
           >
             Sign Up
           </Link>
         </div>
 
         {/* MOBILE MENU ICON */}
-        <HiOutlineMenu className="block md:hidden text-2xl ml-auto" />
+        <HiOutlineMenu className="ml-auto block text-2xl md:hidden" />
       </div>
-    </header>
+    </div>
   );
 }

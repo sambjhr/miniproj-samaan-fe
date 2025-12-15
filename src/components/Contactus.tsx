@@ -1,45 +1,37 @@
-"use client";
-
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-
-export default function ContactUs() {
+export default function Footer() {
   return (
-    <section className="w-full max-w-lg mx-auto mt-10 px-4">
-      <h1 className="text-3xl font-semibold mb-6 text-center">
-        Contact Us
-      </h1>
+    <footer className="text-gray-300 py-10 mt-20 bg-blue-100">
+      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
 
-      <form className="space-y-4">
+        {/* COMPANY */}
         <div>
-          <label className="block text-sm font-medium mb-1">Name</label>
-          <Input
-            type="text"
-            placeholder="Your name"
-            className="w-full"
-          />
+          <img src="/logosamaan.png" alt="" />
         </div>
 
+        {/* QUICK LINKS */}
         <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <Input
-            type="email"
-            placeholder="Your email"
-            className="w-full"
-          />
+          <h3 className="text-lg font-semibold text-blue-700 mb-3">Quick Links</h3>
+          <ul className="space-y-2 text-sm">
+            <li><a href="/" className="text-blue-950 hover:text-white transition">Home</a></li>
+            <li><a href="/home" className="text-blue-950 hover:text-white transition">About Us</a></li>
+            <li><a href="/Event" className="text-blue-950 hover:text-white transition">Event</a></li>
+          </ul>
         </div>
 
+        {/* CONTACT */}
         <div>
-          <label className="block text-sm font-medium mb-1">Message</label>
-          <Textarea
-            placeholder="Your message..."
-            className="w-full min-h-[120px]"
-          />
+          <h3 className="text-lg font-semibold text-blue-700 mb-3">Contact Us</h3>
+          <ul className="space-y-2 text-sm text-blue-950 ">
+            <li>Email: info@samaan.com</li>
+            <li>Phone: +62 812-3456-7890</li>
+            <li>Address: Jakarta, Indonesia</li>
+          </ul>
         </div>
+      </div>
 
-        <Button className="w-fit rounded-lg mx-auto px-8 py-4 bg-blue-800 text-white">Send Message</Button>
-      </form>
-    </section>
-  );
+      <div className=" border-t border-gray-300 mt-8 pt-4 text-center text-sm text-blue-950 ">
+        © {new Date().getFullYear()} Samuel x Hanan. All rights reserved.
+      </div>
+    </footer>
+  )
 }
