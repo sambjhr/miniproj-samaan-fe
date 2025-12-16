@@ -18,7 +18,7 @@ const EventList = () => {
   });
 
   return (
-    <div className="container mx-auto grid grid-cols-4 gap-8 p-4">
+    <div className="container mx-auto grid grid-cols-4 gap-8 p-4 auto-rows-fr items-stretch">
       {isPending ? (
         <div className="col-span-4 my-16 text-center">
           <p className="text-xl font-bold">Loading...</p>
