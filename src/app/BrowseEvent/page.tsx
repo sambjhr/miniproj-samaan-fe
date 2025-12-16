@@ -2,8 +2,11 @@ import Navbar from "@/components/Navbar";
 import Contactus from "@/components/Contactus";
 import Jumbotron from "@/components/ui/Jumbotron";
 import EventList from "@/components/ui/EventList";
+import SearchBar from "./components/SearchBar";
 import CategoryCard from "@/components/ui/CatagoryCard";
 import PromotionList from "@/components/ui/PromotionList";
+
+
 
 const categories = [
   { id: 1, name: "Concert" },
@@ -13,13 +16,16 @@ const categories = [
   { id: 4, name: "Art" },
 ];
 
-function Home() {
+function BrowseEvent() {
   return (
     <div>
       <Navbar />
-      <Jumbotron />
 
-      {/* category event */}
+      <div className="container mx-auto space-y-8 pt-10">
+        
+        <SearchBar />
+
+        {/* category event */}
       <div>
         <h1 className="container mx-auto mb-5 p-10 text-center text-4xl font-bold">
           Choose what you wanna do!
@@ -45,6 +51,8 @@ function Home() {
           Promotions
         </h1>
         <PromotionList />
+
+      </div>
       </div>
 
       {/* Ini letak footer */}
@@ -53,4 +61,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default BrowseEvent;

@@ -18,8 +18,9 @@ export default function Navbar() {
 
         <div className="hidden flex-1 items-center justify-center gap-10 font-medium text-gray-700 md:flex">
           <Link href="/">Home</Link>
-          <Link href="/browseevent">Browse Event</Link>
-          <Link href="/write">Create Event</Link>
+          <Link href="/BrowseEvent">Browse Event</Link>
+          <Link href="/CreateEvent">Create Event</Link>
+          <Link href="/CreatePromotion">Create Promotion</Link>
         </div>
 
         {/* RIGHT: Login + Signup */}

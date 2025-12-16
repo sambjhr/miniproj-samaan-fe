@@ -1,24 +1,35 @@
-import { Event } from "@/types/events";
-import Image from "next/image";
-import { format } from "date-fns";
+import Link from "next/link";
 
-
-interface EventCardProps {
-  event: Event;
+export interface Category {
+  id: number | string;
+  name: string;
+  image?: string;
 }
 
-const CatagoryCard = (props: EventCardProps) => {
+interface CategoryCardProps {
+  category: Category;
+}
+
+const CategoryCard = ({ category }: CategoryCardProps) => {
   return (
-    <div className="space-y-2 rounded-xl border p-3">
-      <Image src="/thumbnail.jpeg" alt="thumbnail" width={500} height={300} />
-      <p className="w-fit rounded-sm bg-blue-800 px-4 text-sm text-white">
-        {props.event.category_id}
-      </p>
-      <h2 className="line-clamp-2 text-xl font-bold">{props.event.title}</h2>
-      <p className="text-lg">Date - {props.event.organizer_id}</p>
-      <p className="line-clamp-3">{props.event.description}</p>
-    </div>
+    <Link href={`/category/${category.id}`} className="group block">
+      <div className="flex h-full flex-col items-center gap-4 rounded-xl p-4 transition hover:shadow-2xl">
+        {/* Circle Image */}
+        <div className="h-40 w-40 overflow-hidden rounded-full bg-slate-300">
+          <img
+            src={category.image || "/thumbnail.jpeg"}
+            alt={category.name}
+            className="block h-full w-full rounded-full object-cover"
+          />
+        </div>
+
+        {/* Label */}
+        <p className="text-lg font-medium text-slate-900">
+          {category.name}
+        </p>
+      </div>
+    </Link>
   );
 };
 
-export default CatagoryCard;
+export default CategoryCard;
