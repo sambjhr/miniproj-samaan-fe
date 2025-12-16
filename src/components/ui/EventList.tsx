@@ -10,15 +10,13 @@ const EventList = () => {
   const { data: events, isPending } = useQuery({
     queryKey: ["events"],
     queryFn: async () => {
-      const users = await axiosInstance.get<Event[]>(
-        "/api/data/Event",
-      );
+      const users = await axiosInstance.get<Event[]>("/api/data/Event");
       return users.data;
     },
   });
 
   return (
-    <div className="container mx-auto grid grid-cols-4 gap-8 p-4 auto-rows-fr items-stretch">
+    <div className="container mx-auto grid auto-rows-fr grid-cols-1 items-stretch gap-8 p-4 sm:grid-cols-2 lg:grid-cols-4">
       {isPending ? (
         <div className="col-span-4 my-16 text-center">
           <p className="text-xl font-bold">Loading...</p>
