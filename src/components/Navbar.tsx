@@ -9,9 +9,9 @@ export default function Navbar() {
         <div className="flex items-center">
           <Link href="/">
             <img
-              src="/logosamaan.png"
+              src="/gambar/logo/samaannyamping.png"
               alt="logo"
-              className="h-[30px] w-[140px] cursor-pointer md:h-10 md:w-[186px]"
+              className="h-[71px]  cursor-pointer md:h-10 md:w-[186px]"
             />
           </Link>
         </div>
@@ -21,6 +21,7 @@ export default function Navbar() {
           <Link href="/BrowseEvent">Browse Event</Link>
           <Link href="/CreateEvent">Create Event</Link>
           <Link href="/CreatePromotion">Create Promotion</Link>
+          <Link href="/Transaction">My Transaction</Link>
         </div>
 
         {/* RIGHT: Login + Signup */}

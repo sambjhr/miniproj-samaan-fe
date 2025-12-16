@@ -5,7 +5,7 @@ export default function Footer() {
 
         {/* COMPANY */}
         <div>
-          <img src="/logosamaan.png" alt="" />
+          <img src="/gambar/logo/samaanlogo.png" alt="logo samaan" className="max-w-5/12"/>
         </div>
 
         {/* QUICK LINKS */}
