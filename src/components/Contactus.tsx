@@ -1,11 +1,14 @@
+import Image from "next/image";
+
 export default function Footer() {
   return (
     <footer className="text-gray-300 py-10 mt-20 bg-blue-100">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
 
-        {/* COMPANY */}
+        {/* Logo Samaan */}
         <div>
           <img src="/gambar/logo/samaanlogo.png" alt="logo samaan" className="max-w-5/12"/>
+          <Image />
         </div>
 
         {/* QUICK LINKS */}

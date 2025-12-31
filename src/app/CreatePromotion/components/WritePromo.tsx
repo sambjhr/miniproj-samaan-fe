@@ -188,7 +188,7 @@ const CreatePromotionVoucherPage = () => {
                     {...field}
                     id="eventId"
                     aria-invalid={fieldState.invalid ? "true" : "false"}
-                    placeholder="Masukkan event_id"
+                    placeholder="Masukkan ID Event"
                   />
                   {fieldState.error && (
                     <FieldError errors={[fieldState.error]} />

@@ -128,7 +128,7 @@ const WritePage = () => {
                     {...field}
                     id="title"
                     aria-invalid={fieldState.invalid ? "true" : "false"}
-                    placeholder="Your title"
+                    placeholder="Enter your event name here!"
                   />
                   {fieldState.error && (
                     <FieldError errors={[fieldState.error]} />
