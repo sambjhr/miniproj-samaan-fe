@@ -21,7 +21,6 @@ interface ThumbnailResponse {
   filePath: string;
 }
 
-// ✅ Schema Promotion Voucher
 const formSchema = z
   .object({
     voucherName: z

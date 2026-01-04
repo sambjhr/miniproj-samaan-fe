@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -19,28 +18,25 @@ import { toast } from "sonner";
 import z from "zod";
 import { useFieldArray } from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { ApiError } from "next/dist/server/api-utils";
 
-interface ThumbnailResponse {
-  fileURL: string;
-  filePath: string;
-}
+
 const ticketSchema = z.object({
   name: z.string().min(1, "Ticket name is required."),
   price: z.coerce.number().min(0, "Price must be 0 or more."),
   quota: z.coerce.number().int().min(1, "Quota must be at least 1."),
 });
 
-// 🧩 Skema validasi form
-const formSchema = z
-  .object({
+const formSchema = z.object({
     title: z.string().min(5, "Title must be at least 5 characters."),
-    organizer: z.string().min(3, "Author must be at least 3 characters."),
     category: z.string().min(3, "Category must be at least 3 characters."),
     description: z
       .string()
       .min(10, "Description must be at least 10 characters."),
     startDate: z.string().min(1, "Start date is required."),
     endDate: z.string().min(1, "End date is required."),
+    location: z.string().min(1, "Location is required."),
     image: z.instanceof(File, { message: "Thumbnail is required." }),
     tickets: z
       .array(ticketSchema)
@@ -51,20 +47,22 @@ const formSchema = z
     path: ["endDate"],
   });
 
+  export type FormValues = z.infer<typeof formSchema>;
+
 const WritePage = () => {
   const router = useRouter();
+  const session = useSession();
 
-  // 🧩 Gunakan useForm dengan zodResolver
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
       title: "",
-      organizer: "",
       category: "",
       description: "",
       startDate: "",
       endDate: "",
+      location: "",
       image: undefined,
       tickets: [{ name: "", price: 0, quota: 1 }],
     },
@@ -75,34 +73,32 @@ const WritePage = () => {
     name: "tickets",
   });
 
-  // 🧩 Mutation untuk submit form
   const { mutateAsync: write, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof formSchema>) => {
+      const token = session.data?.user.accessToken;
+      if(!token) throw new ApiError(401, "No acess token");
+
       const formData = new FormData();
-      const folderName = "images";
-      const fileName = Date.now() + Math.floor(Math.random() * 1000);
-      const url = `/api/files/${folderName}/${fileName}`;
-
-      formData.append("file", data.image);
-
-      // Upload file
-      const result = await axiosInstance.post<ThumbnailResponse>(url, formData);
+      
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("start_date", data.startDate);
+      formData.append("end_date", data.endDate);
+      formData.append("location", data.location);
+      formData.append("image", data.image);
+      formData.append("tickets", JSON.stringify(data.tickets));
 
       // Kirim data ke database
-      await axiosInstance.post(`/api/data/Blogs`, {
-        author: data.organizer,
-        category: data.category,
-        description: data.description,
-        title: data.title,
-        thumbnail: result.data.fileURL,
+      await axiosInstance.post(`/events/`, formData, {
+        headers: {Authorization: `Bearer ${token}`},
       });
     },
     onSuccess: () => {
-      toast.success("Blog created successfully!");
+      toast.success("Event created successfully!");
       router.push("/");
     },
     onError: () => {
-      toast.error("Failed to create blog.");
+      toast.error("Failed to create event.");
     },
   });
 
@@ -115,7 +111,7 @@ const WritePage = () => {
   return (
     <div>
       <div className="container mx-auto p-4 max-w-7xl">
-        <form id="form-write" onSubmit={form.handleSubmit(onsubmit)}>
+        <form id="form-write" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             {/* Title */}
             <Controller
@@ -217,6 +213,26 @@ const WritePage = () => {
                 )}
               />
             </div>
+
+            {/* location */}
+            <Controller
+              name="location"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="location">Location</FieldLabel>
+                  <Input
+                    {...field}
+                    id="location"
+                    aria-invalid={fieldState.invalid ? "true" : "false"}
+                    placeholder="Location - exp: Jakarta"
+                  />
+                  {fieldState.error && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
 
             {/* Thumbnail */}
             <Controller

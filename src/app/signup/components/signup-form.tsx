@@ -1,13 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
@@ -21,19 +15,18 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
+  name: z.string().min(5, "Name must be at least 5 characters."),
   email: z.email(),
   password: z.string().min(5, "Password must be at least 5 characters."),
 });
 
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -42,31 +35,24 @@ export function LoginForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  const { mutateAsync: login, isPending } = useMutation({
+  const { mutateAsync: register, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof formSchema>) => {
-      const result = await axiosInstance.post("/auth/login", {
+      const result = await axiosInstance.post("/auth/register", {
+        name: data.name,
         email: data.email,
         password: data.password,
       });
-
       return result.data;
     },
-    onSuccess: async (result) => {
-      await signIn("credentials", {
-        id: result.id,
-        name: result.name,
-        email: result.email,
-        accessToken: result.accessToken,
-        redirect: false,
-      });
-
-      toast.success("Login success");
-      router.push("/");
+    onSuccess: () => {
+      toast.success("Register success");
+      router.push("/login");
     },
     onError: (error: AxiosError<{ message: string }>) => {
       toast.error(error.response?.data.message ?? "Something went wrong!");
@@ -74,21 +60,45 @@ export function LoginForm({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    await login(data);
+    await register(data);
   }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form id="form-login" onSubmit={form.handleSubmit(onSubmit)}>
+      <Card className="overflow-hidden p-0">
+        <CardContent className="grid p-0 md:grid-cols-2">
+          <form
+            className="p-6 md:p-8"
+            id="form-register"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <FieldGroup>
+              <div className="flex flex-col items-center gap-2 text-center">
+                <h1 className="text-2xl font-bold">Create your account</h1>
+                <p className="text-muted-foreground text-sm text-balance">
+                  Enter your email below to create your account
+                </p>
+              </div>
+
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="name">Name</FieldLabel>
+                    <Input
+                      {...field}
+                      id="name"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Your name"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
               <Controller
                 name="email"
                 control={form.control}
@@ -130,16 +140,23 @@ export function LoginForm({
               />
 
               <Field>
-                <Button type="submit" form="form-login" disabled={isPending}>
-                  {isPending ? "Loading" : "Login"}
+                <Button type="submit" form="form-register" disabled={isPending}>
+                  {isPending ? "Loading" : "Create Account"}
                 </Button>
-
-                <FieldDescription className="text-center">
-                  Don&apos;t have an account? <Link href="/signup">Sign up</Link>
-                </FieldDescription>
               </Field>
+
+              <FieldDescription className="text-center">
+                Already have an account? <a href="#">Sign in</a>
+              </FieldDescription>
             </FieldGroup>
           </form>
+          <div className="bg-muted relative hidden md:block">
+            <img
+              src="/thumbnail.avif"
+              alt="Image"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+            />
+          </div>
         </CardContent>
       </Card>
     </div>
